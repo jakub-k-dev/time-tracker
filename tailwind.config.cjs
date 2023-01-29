@@ -11,7 +11,7 @@ module.exports = {
         text: "#303030",
       },
       secondary: {
-        main: "#8d99ae",
+        main: "#555555",
         alt: "#2b2d42",
         text: "#e1e1e1",
       },

@@ -12,8 +12,8 @@ export default function Navbar() {
   const { pathname } = useLocation();
 
   return (
-    <nav className="bg-primary-main">
-      <div className="sticky mx-auto px-8 flex h-16 items-center justify-between">
+    <nav className="sticky bg-primary-main m-4 rounded-2xl">
+      <div className="mx-auto px-8 flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <img className="h-8 w-auto" src="/clock.svg" alt="Time tracker" />
           <div className="flex gap-4">
