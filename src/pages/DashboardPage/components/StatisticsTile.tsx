@@ -13,9 +13,11 @@ export default function StatisticsTile() {
     <Tile title="Statistics">
       <table>
         {tableValues.map((col) => (
-          <tr>
-            {col.map((cell) => (
-              <td className="p-1">{cell}</td>
+          <tr key={`row-${col[0]}`}>
+            {col.map((cell, i) => (
+              <td className="p-1" key={`row-${col[0]}-col-${i}`}>
+                {cell}
+              </td>
             ))}
           </tr>
         ))}

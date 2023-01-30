@@ -2,6 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DashboardPage, FaqPage, ListPage, NotFoundPage } from "src/pages";
 
 import { Layout } from "./components";
+import fontAwesomeConfig from "./FontAwesomeConfig";
+
+fontAwesomeConfig();
 
 export default function App() {
   return (

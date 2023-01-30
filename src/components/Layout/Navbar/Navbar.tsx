@@ -5,6 +5,7 @@ import NavItem from "./NavItem";
 
 const navigation = [
   { name: "Dashboard", href: "/" },
+  { name: "List", href: "/list" },
   { name: "Faq", href: "/faq" },
 ];
 

@@ -9,7 +9,7 @@ export default function Layout({ children }: Props) {
     <div className="h-screen bg-secondary-main">
       <div className="mx-32 bg-secondary-alt h-full overflow-auto shadow-xl">
         <Navbar />
-        <div className="p-16">{children}</div>
+        <div className="p-16 pt-8">{children}</div>
       </div>
     </div>
   );
