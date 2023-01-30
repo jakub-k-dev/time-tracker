@@ -1,45 +1,50 @@
+import { useMutation, useQuery } from "react-query";
 import { IconButton, Tile } from "src/components";
+import { TimeTableEntry } from "src/types";
+import { parseDateRangeToString } from "src/utils/dateUtils";
+
+import { deleteTimeTableEntry, fetchTimeTable } from "../api";
 
 type TableRowData = {
-  id: number;
+  id: string;
   time: string;
   info: string;
   date?: string;
 };
 
-const mockData: TableRowData[] = [
-  {
-    id: 1,
-    time: "2h",
-    info: "nič som nerobil",
-    date: "11.11.2011 - 12.12.2012",
-  },
-  { id: 3, time: "2h", info: "spravil som všetko", date: "21.12.2012" },
-  { id: 4, time: "2h", info: "zase nič", date: "2.5.2000" },
-  { id: 2, time: "2h", info: "bez komentára" },
-];
+const mapResponseDataToTableData = (
+  responseData: TimeTableEntry[]
+): TableRowData[] =>
+  responseData.map(({ id, time, info, fromDate, toDate }) => ({
+    id,
+    time: `${time}h`,
+    info,
+    date: parseDateRangeToString(fromDate, toDate),
+  }));
 
 const TableHeader = () => (
-  <tr>
-    <th className="p-2 w-20">Time</th>
-    <th className="p-2 w-60">Info</th>
-    <th className="p-2 w-40">Date</th>
-    <th className="p-2 w-20">Actions</th>
-  </tr>
+  <thead>
+    <tr>
+      <th className="p-2 w-20">Time</th>
+      <th className="p-2 w-60">Info</th>
+      <th className="p-2 w-40">Date</th>
+      <th className="p-2 w-20">Actions</th>
+    </tr>
+  </thead>
 );
 
 type TableContentProps = {
   data: TableRowData[];
-  onRowEditButtonClick: (id: number) => void;
-  onRowDeleteButtonClick: (id: number) => void;
+  onRowEditButtonClick: (id: string) => void;
+  onRowDeleteButtonClick: (id: string) => void;
 };
 
-const TableContent = ({
+const TableBody = ({
   data,
   onRowDeleteButtonClick,
   onRowEditButtonClick,
 }: TableContentProps) => (
-  <>
+  <tbody>
     {data.map(({ id, info, time, date }) => (
       <tr key={`row-${id}`}>
         <td className="p-2 border-t-2 border-t-black text-center">{time}</td>
@@ -53,7 +58,7 @@ const TableContent = ({
         </td>
       </tr>
     ))}
-  </>
+  </tbody>
 );
 
 type TableRowActionButtonsProps = {
@@ -84,19 +89,43 @@ const TableActionButtons = ({
 };
 
 export default function TimeTable() {
-  const handleRowEditButtonClick = (id: number) => {
+  const {
+    isLoading,
+    isError,
+    isSuccess,
+    data: timeTableResponse,
+    refetch: refetchTimeTable,
+  } = useQuery("timeTable", fetchTimeTable);
+
+  const { isLoading: isDeleting, mutate: handleTimeTableDeleteEntry } =
+    useMutation("timeTableDeleteEntry", deleteTimeTableEntry, {
+      onSuccess: () => refetchTimeTable(),
+    });
+
+  const handleRowEditButtonClick = (id: string) => {
     console.log("edit:", id);
   };
-  const handleRowDeleteButtonClick = (id: number) => {
-    console.log("delete:", id);
+
+  const handleRowDeleteButtonClick = (id: string) => {
+    handleTimeTableDeleteEntry(id);
   };
+
+  if (isLoading || isDeleting) {
+    return "loading";
+  }
+
+  if (isError || !isSuccess) {
+    return "error";
+  }
+
+  const parsedData = mapResponseDataToTableData(timeTableResponse);
 
   return (
     <Tile>
       <table>
         <TableHeader />
-        <TableContent
-          data={mockData}
+        <TableBody
+          data={parsedData}
           onRowDeleteButtonClick={handleRowDeleteButtonClick}
           onRowEditButtonClick={handleRowEditButtonClick}
         />
