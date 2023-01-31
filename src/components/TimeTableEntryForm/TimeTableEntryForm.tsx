@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReactNode } from "react";
 import { useForm, useFormState } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Button, Loader } from "src/components";
 import { TimeTableEntry, TimeTableEntryWithoutId } from "src/types";
 import { z } from "zod";
@@ -8,11 +9,13 @@ import { z } from "zod";
 import { createTimeTableEntry, editTimeTableEntry } from "./api";
 import TimeTableEntryFormFields from "./TimeTableEntryFormFields";
 
-type FormMode = "creating" | "editing";
+export type TimeTableEntryFormMode = "creating" | "editing";
 
 type Props = {
-  mode: FormMode;
+  mode?: TimeTableEntryFormMode;
   defaultValues?: TimeTableEntry;
+  onFormSubmitSuccess?: () => void;
+  additionalFooterContent?: ReactNode;
 };
 
 export type FormValues = {
@@ -24,7 +27,11 @@ export type FormValues = {
 const FORM_ID = "timeTableEntryForm";
 
 const schema = z.object({
-  time: z.coerce.number().positive().int().finite(),
+  time: z.coerce
+    .number()
+    .positive({ message: "Time is required" })
+    .finite()
+    .max(24),
   info: z.string().min(1, {
     message: "Info is required",
   }),
@@ -57,9 +64,17 @@ const mapFormValuesToTimeTableEnrty = ({
   info,
 });
 
-export default function TimeTableEntryForm({ mode, defaultValues }: Props) {
+export default function TimeTableEntryForm({
+  mode = "creating",
+  defaultValues,
+  onFormSubmitSuccess,
+  additionalFooterContent,
+}: Props) {
+  const queryClient = useQueryClient();
   const handleFormSubmitSuccess = () => {
     reset(emptyFormValues);
+    queryClient.invalidateQueries({ queryKey: "fetchTimeTable" });
+    onFormSubmitSuccess?.();
   };
 
   const { mutate: handleCreateTimeTableEnrty, isLoading: isCreating } =
@@ -74,7 +89,6 @@ export default function TimeTableEntryForm({ mode, defaultValues }: Props) {
   const {
     control,
     register,
-    getValues,
     handleSubmit,
     formState: { errors },
     reset,
@@ -83,7 +97,7 @@ export default function TimeTableEntryForm({ mode, defaultValues }: Props) {
     defaultValues: defaultValues
       ? mapDefaultValuesToFormValues(defaultValues)
       : emptyFormValues,
-    mode: "onChange",
+    mode: "all",
   });
   const { isDirty } = useFormState({ control });
 
@@ -110,7 +124,6 @@ export default function TimeTableEntryForm({ mode, defaultValues }: Props) {
     return <Loader />;
   }
 
-  console.log(errors, getValues());
   return (
     <>
       <form
@@ -119,7 +132,8 @@ export default function TimeTableEntryForm({ mode, defaultValues }: Props) {
         className="flex flex-col gap-8"
       >
         <TimeTableEntryFormFields register={register} errors={errors} />
-        <div className="self-end">
+        <div className="self-end flex gap-4">
+          {additionalFooterContent}
           <Button form={FORM_ID} disabled={isSubmitDisabled}>
             Submit
           </Button>

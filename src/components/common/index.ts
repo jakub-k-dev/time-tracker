@@ -6,3 +6,4 @@ export { default as TextAreaInput } from "./ReactHookFormInputs/TextAreaInput";
 export { default as TextInput } from "./ReactHookFormInputs/TextInput";
 export { default as NumberInput } from "./ReactHookFormInputs/NumberInput";
 export { default as Button } from "./Button";
+export { default as Modal } from "./Modal";

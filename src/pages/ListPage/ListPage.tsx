@@ -1,12 +1,12 @@
-import { PageTitle } from "src/components";
-
+import PageHeader from "./components/PageHeader";
 import TimeTable from "./components/TimeTable";
+import TimeTableEntryFormModal from "./components/TimeTableEntryFormModal/TimeTableEntryFormModal";
 
 export default function ListPage() {
   return (
     <div className="flex flex-col gap-8 items-start">
-      <PageTitle title="Times List" />
-      <TimeTable />
+      <PageHeader /> <TimeTable />
+      <TimeTableEntryFormModal />
     </div>
   );
 }

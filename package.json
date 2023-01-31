@@ -14,12 +14,16 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^2.9.10",
+    "@types/react-modal": "^3.13.1",
     "axios": "^1.2.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.0",
+    "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.0",
+    "redux": "^4.2.1",
     "zod": "^3.20.2"
   },
   "devDependencies": {

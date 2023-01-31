@@ -2,8 +2,9 @@ type ButtonVariant = "primary" | "secondary";
 
 const mapVariantToStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary-main text-primary-text hover:bg-primary-alt border-secondary-main",
-  secondary: "bg-secondary-main hover:bg-secondary-alt border-primary-main",
+    "bg-primary-main text-primary-text hover:bg-primary-alt border-secondary-main disabled:bg-primary-alt",
+  secondary:
+    "bg-secondary-main text-secondary-text hover:bg-secondary-alt border-primary-main disabled:bg-secondary-alt",
 };
 
 type Props = { variant?: ButtonVariant } & React.DetailedHTMLProps<
@@ -15,7 +16,7 @@ export default function Button({ variant = "primary", ...rest }: Props) {
   return (
     <button
       {...rest}
-      className={`w-24 h-12 rounded-md border-2 ${mapVariantToStyles[variant]}`}
+      className={`py-3 px-4 rounded-md border-2 ${mapVariantToStyles[variant]}`}
     />
   );
 }

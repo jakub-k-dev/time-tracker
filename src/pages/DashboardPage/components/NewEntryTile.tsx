@@ -1,5 +1,4 @@
-import { Tile } from "src/components";
-import TimeTableEntryForm from "src/components/TimeTableEntryForm/TimeTableEntryForm";
+import { Tile, TimeTableEntryForm } from "src/components";
 
 export default function NewEntryTile() {
   return (

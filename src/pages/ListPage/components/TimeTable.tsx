@@ -1,8 +1,11 @@
 import { useMutation, useQuery } from "react-query";
+import { useDispatch } from "react-redux";
 import { IconButton, Loader, Tile } from "src/components";
 import { TimeTableEntry } from "src/types";
 
 import { deleteTimeTableEntry, fetchTimeTable } from "../api";
+
+import { timeTableModalOpen } from "./TimeTableEntryFormModal/redux/actions";
 
 type TableRowData = {
   id: string;
@@ -88,6 +91,7 @@ const TableActionButtons = ({
 };
 
 export default function TimeTable() {
+  const dispatch = useDispatch();
   const {
     isLoading,
     isError,
@@ -102,7 +106,10 @@ export default function TimeTable() {
     });
 
   const handleRowEditButtonClick = (id: string) => {
-    console.log("edit:", id);
+    const timeTableEntry = timeTableResponse?.find(
+      ({ id: entryId }) => entryId === id
+    );
+    timeTableEntry && dispatch(timeTableModalOpen("editing", timeTableEntry));
   };
 
   const handleRowDeleteButtonClick = (id: string) => {
