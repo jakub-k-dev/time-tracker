@@ -1,27 +1,27 @@
 import { TimeTableEntryFormMode } from "src/components/TimeTableEntryForm/TimeTableEntryForm";
 import { TimeTableEntry } from "src/types";
 
-export type TimeTableActions =
-  | TimeTableModalOpenAction
-  | TimeTableModalCloseAction;
+export type TimeTableFormActions =
+  | TimeTableFormModalOpenAction
+  | TimeTableFormModalCloseAction;
 
-type TimeTableModalOpenAction = {
-  type: "TIME_TABLE.MODAL.OPEN";
+type TimeTableFormModalOpenAction = {
+  type: "TIME_TABLE_FORM.MODAL.OPEN";
   payload: { mode: TimeTableEntryFormMode; formDefaultValues?: TimeTableEntry };
 };
 
-type TimeTableModalCloseAction = {
-  type: "TIME_TABLE.MODAL.CLOSE";
+type TimeTableFormModalCloseAction = {
+  type: "TIME_TABLE_FORM.MODAL.CLOSE";
 };
 
-export const timeTableModalOpen = (
+export const timeTableFormModalOpen = (
   mode: TimeTableEntryFormMode,
   formDefaultValues?: TimeTableEntry
-): TimeTableModalOpenAction => ({
-  type: "TIME_TABLE.MODAL.OPEN",
+): TimeTableFormModalOpenAction => ({
+  type: "TIME_TABLE_FORM.MODAL.OPEN",
   payload: { mode, formDefaultValues },
 });
 
-export const timeTableModalClose = (): TimeTableModalCloseAction => ({
-  type: "TIME_TABLE.MODAL.CLOSE",
+export const timeTableFormModalClose = (): TimeTableFormModalCloseAction => ({
+  type: "TIME_TABLE_FORM.MODAL.CLOSE",
 });

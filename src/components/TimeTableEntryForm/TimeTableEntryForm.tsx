@@ -54,7 +54,7 @@ const mapDefaultValuesToFormValues = ({
   info,
 });
 
-const mapFormValuesToTimeTableEnrty = ({
+const mapFormValuesToTimeTableEntry = ({
   date,
   info,
   time,
@@ -77,11 +77,11 @@ export default function TimeTableEntryForm({
     onFormSubmitSuccess?.();
   };
 
-  const { mutate: handleCreateTimeTableEnrty, isLoading: isCreating } =
+  const { mutate: handleCreateTimeTableEntry, isLoading: isCreating } =
     useMutation("createTimeTableEntry", createTimeTableEntry, {
       onSuccess: handleFormSubmitSuccess,
     });
-  const { mutate: handleEditTimeTableEnrty, isLoading: isEditing } =
+  const { mutate: handleEditTimeTableEntry, isLoading: isEditing } =
     useMutation("editTimeTableEntry", editTimeTableEntry, {
       onSuccess: handleFormSubmitSuccess,
     });
@@ -102,15 +102,15 @@ export default function TimeTableEntryForm({
   const { isDirty } = useFormState({ control });
 
   const handleFormSubmit = (data: FormValues) => {
-    const parsedData = mapFormValuesToTimeTableEnrty(data);
+    const parsedData = mapFormValuesToTimeTableEntry(data);
     switch (mode) {
       case "creating": {
-        handleCreateTimeTableEnrty(parsedData);
+        handleCreateTimeTableEntry(parsedData);
         break;
       }
       case "editing": {
         defaultValues?.id &&
-          handleEditTimeTableEnrty({ id: defaultValues.id, data: parsedData });
+          handleEditTimeTableEntry({ id: defaultValues.id, data: parsedData });
         break;
       }
     }

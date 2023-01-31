@@ -1,8 +1,12 @@
-import ReactModal, { Props } from "react-modal";
+import ReactModal, { Props as ReactModalProps } from "react-modal";
 
 import Tile from "../Tile";
 
-export default function Modal({ children, ...rest }: Props) {
+type Props = {
+  title?: string;
+} & ReactModalProps;
+
+export default function Modal({ title, children, ...rest }: Props) {
   return (
     <ReactModal
       style={{
@@ -17,7 +21,7 @@ export default function Modal({ children, ...rest }: Props) {
       {...rest}
     >
       <div className="w-1/2">
-        <Tile>{children}</Tile>
+        <Tile title={title}>{children}</Tile>
       </div>
     </ReactModal>
   );

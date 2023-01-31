@@ -1,9 +1,9 @@
 import { StoreState } from "src/reducer";
 
 export const getIsModalOpen = (state: StoreState) =>
-  state.timeTableReducer.isModalOpen;
+  state.timeTableEntryForm.isModalOpen;
 
 export const getFormDefaultValues = (state: StoreState) =>
-  state.timeTableReducer.formDefaultValues;
+  state.timeTableEntryForm.formDefaultValues;
 
-export const getFormMode = (state: StoreState) => state.timeTableReducer.mode;
+export const getFormMode = (state: StoreState) => state.timeTableEntryForm.mode;

@@ -1,26 +1,26 @@
 import { TimeTableEntryFormMode } from "src/components/TimeTableEntryForm/TimeTableEntryForm";
 import { TimeTableEntry } from "src/types";
 
-import { TimeTableActions } from "./actions";
+import { TimeTableFormActions } from "./actions";
 
-export type TimeTableState = {
+export type TimeTableEntryFormState = {
   isModalOpen: boolean;
   formDefaultValues?: TimeTableEntry;
   mode?: TimeTableEntryFormMode;
 };
 
-const initialState: TimeTableState = {
+const initialState: TimeTableEntryFormState = {
   isModalOpen: false,
   formDefaultValues: undefined,
   mode: undefined,
 };
 
-export function timeTableReducer(
-  state: TimeTableState = initialState,
-  action: TimeTableActions
+export function timeTableEntryFormReducer(
+  state: TimeTableEntryFormState = initialState,
+  action: TimeTableFormActions
 ) {
   switch (action.type) {
-    case "TIME_TABLE.MODAL.OPEN": {
+    case "TIME_TABLE_FORM.MODAL.OPEN": {
       const { mode, formDefaultValues } = action.payload;
       return {
         ...state,
@@ -30,7 +30,7 @@ export function timeTableReducer(
       };
     }
 
-    case "TIME_TABLE.MODAL.CLOSE": {
+    case "TIME_TABLE_FORM.MODAL.CLOSE": {
       return {
         ...state,
         isModalOpen: false,

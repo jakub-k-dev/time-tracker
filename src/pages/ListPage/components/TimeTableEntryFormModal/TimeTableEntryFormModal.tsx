@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, TimeTableEntryForm } from "src/components";
 import { TimeTableEntryFormMode } from "src/components/TimeTableEntryForm/TimeTableEntryForm";
 
-import { timeTableModalClose } from "./redux/actions";
+import { timeTableFormModalClose } from "./redux/actions";
 import {
   getFormDefaultValues,
   getFormMode,
@@ -20,25 +20,23 @@ export default function TimeTableEntryFormModal() {
   const formMode = useSelector(getFormMode);
   const formDefaultValues = useSelector(getFormDefaultValues);
 
-  const handleCloseModal = () => dispatch(timeTableModalClose());
+  const handleCloseModal = () => dispatch(timeTableFormModalClose());
 
   return (
-    <Modal isOpen={isModalOpen}>
-      <div className="flex flex-col gap-4">
-        {formMode && (
-          <h2 className="font-bold">{mapModeToModalTitle[formMode]}</h2>
-        )}
-        <TimeTableEntryForm
-          mode={formMode}
-          defaultValues={formDefaultValues}
-          onFormSubmitSuccess={handleCloseModal}
-          additionalFooterContent={
-            <Button onClick={handleCloseModal} variant="secondary">
-              Cancel
-            </Button>
-          }
-        />
-      </div>
+    <Modal
+      isOpen={isModalOpen}
+      title={formMode && mapModeToModalTitle[formMode]}
+    >
+      <TimeTableEntryForm
+        mode={formMode}
+        defaultValues={formDefaultValues}
+        onFormSubmitSuccess={handleCloseModal}
+        additionalFooterContent={
+          <Button onClick={handleCloseModal} variant="secondary" type="button">
+            Cancel
+          </Button>
+        }
+      />
     </Modal>
   );
 }
