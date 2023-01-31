@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "react-query";
-import { IconButton, Tile } from "src/components";
+import { IconButton, Loader, Tile } from "src/components";
 import { TimeTableEntry } from "src/types";
-import { parseDateRangeToString } from "src/utils/dateUtils";
 
 import { deleteTimeTableEntry, fetchTimeTable } from "../api";
 
@@ -15,11 +14,11 @@ type TableRowData = {
 const mapResponseDataToTableData = (
   responseData: TimeTableEntry[]
 ): TableRowData[] =>
-  responseData.map(({ id, time, info, fromDate, toDate }) => ({
+  responseData.map(({ id, time, info, date }) => ({
     id,
     time: `${time}h`,
     info,
-    date: parseDateRangeToString(fromDate, toDate),
+    date: new Date(date).toLocaleDateString(),
   }));
 
 const TableHeader = () => (
@@ -95,10 +94,10 @@ export default function TimeTable() {
     isSuccess,
     data: timeTableResponse,
     refetch: refetchTimeTable,
-  } = useQuery("timeTable", fetchTimeTable);
+  } = useQuery("fetchTimeTable", fetchTimeTable);
 
   const { isLoading: isDeleting, mutate: handleTimeTableDeleteEntry } =
-    useMutation("timeTableDeleteEntry", deleteTimeTableEntry, {
+    useMutation("deleteTimeTableEntry", deleteTimeTableEntry, {
       onSuccess: () => refetchTimeTable(),
     });
 
@@ -111,7 +110,7 @@ export default function TimeTable() {
   };
 
   if (isLoading || isDeleting) {
-    return "loading";
+    return <Loader />;
   }
 
   if (isError || !isSuccess) {

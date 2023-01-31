@@ -1,15 +1,12 @@
-import { Tile } from "src/components";
-
 import CurrentTimerTile from "./components/CurrentTimerTile";
+import NewEntryTile from "./components/NewEntryTile";
 import StatisticsTile from "./components/StatisticsTile";
 
 export default function DashboardPage() {
   return (
     <h1>
       <div className="grid grid-cols-2 gap-8">
-        <Tile ySize={2} title="Manual entry">
-          <div></div>
-        </Tile>
+        <NewEntryTile />
         <CurrentTimerTile />
         <StatisticsTile />
       </div>

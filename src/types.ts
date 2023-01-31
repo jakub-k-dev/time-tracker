@@ -1,7 +1,8 @@
 export type TimeTableEntry = {
   id: string;
   info: string;
-  fromDate: string;
-  toDate: string;
+  date: string;
   time: number;
 };
+
+export type TimeTableEntryWithoutId = Omit<TimeTableEntry, "id">;
