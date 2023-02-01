@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
+
 type Props = {
-  title: string;
+  children: ReactNode;
 };
 
-export default function PageTitle({ title }: Props) {
-  return <h1 className="text-3xl font-bold text-secondary-text">{title}</h1>;
+export default function PageTitle({ children }: Props) {
+  return <h1 className="text-3xl font-bold text-secondary-text">{children}</h1>;
 }

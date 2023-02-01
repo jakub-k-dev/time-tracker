@@ -11,7 +11,7 @@ export default function PageHeader() {
 
   return (
     <div className="w-full flex justify-between">
-      <PageTitle title="Times List" />
+      <PageTitle>Times List</PageTitle>
       <Button onClick={handleCreateNewEntryButtonClick} type="button">
         Crete new entry
       </Button>
