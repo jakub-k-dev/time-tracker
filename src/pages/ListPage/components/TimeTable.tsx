@@ -1,3 +1,4 @@
+import { ClockIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQuery } from "react-query";
 import { useDispatch } from "react-redux";
 import { IconButton, Loader, Tile } from "src/components";
@@ -12,7 +13,7 @@ type TableRowData = {
   id: string;
   time: string;
   info: string;
-  date?: string;
+  date: string;
 };
 
 const mapResponseDataToTableData = (
@@ -22,16 +23,16 @@ const mapResponseDataToTableData = (
     id,
     time: `${time}h`,
     info,
-    date: new Date(date).toLocaleDateString(),
+    date,
   }));
 
 const TableHeader = () => (
   <thead>
     <tr>
-      <th className="p-2 w-20">Time</th>
-      <th className="p-2 w-60">Info</th>
-      <th className="p-2 w-40">Date</th>
-      <th className="p-2 w-20">Actions</th>
+      <th className="p-2 text-left">Date</th>
+      <th className="p-2 text-left">Time</th>
+      <th className="p-2 text-left">Info</th>
+      <th className="p-2 text-left">Actions</th>
     </tr>
   </thead>
 );
@@ -51,13 +52,32 @@ const TableBody = ({
 }: TableContentProps) => (
   <tbody>
     {data.map(({ id, info, time, date }) => (
-      <tr key={`row-${id}`}>
-        <td className="p-2 border-t-2 border-t-black text-center">{time}</td>
-        <td className="p-4 border-t-2 border-t-black text-center">
-          <p className="max-h-14 overflow-hidden">{info}</p>
+      <tr key={`row-${id}`} className="border-t-2 border-t-black">
+        <td className="p-2">
+          <div className="flex gap-2 items-center">
+            <div className="h-10 w-10 p-1 bg-gray-200 rounded-md shadow border-t-4 border-t-red-600 font-bold text-center">
+              {new Date(date).getDate()}.
+            </div>
+            <div>
+              <p className="text-sm font-semibold">
+                {new Date(date).toLocaleDateString(undefined, {
+                  weekday: "long",
+                })}
+              </p>
+              <p className="text-xs">{new Date(date).toLocaleDateString()}</p>
+            </div>
+          </div>
         </td>
-        <td className="p-2 border-t-2 border-t-black text-center">{date}</td>
-        <td className="p-2 border-t-2 border-t-black">
+        <td className="p-2 text-center">
+          <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-0.5 text-sm font-medium w-20 justify-between">
+            <ClockIcon className="h-4" />
+            {time}
+          </span>
+        </td>
+        <td className="p-4 max-w-xl">
+          <p className=" text-sm line-clamp-2">{info}</p>
+        </td>
+        <td className="p-2">
           <TableActionButtons
             onRowDeleteButtonClick={() => onRowDeleteButtonClick(id)}
             onRowEditButtonClick={() => onRowEditButtonClick(id)}
@@ -147,18 +167,23 @@ export default function TimeTable() {
   }
 
   const parsedData = mapResponseDataToTableData(timeTableResponse);
+  const sortedData = parsedData.sort(({ date: date1 }, { date: date2 }) =>
+    new Date(date1) > new Date(date2) ? 1 : -1
+  );
 
   return (
     <Tile title="Time table">
-      <table>
-        <TableHeader />
-        <TableBody
-          data={parsedData}
-          onRowDeleteButtonClick={handleRowDeleteButtonClick}
-          onRowEditButtonClick={handleRowEditButtonClick}
-          onInfoButtonClick={handleInfoButtonClick}
-        />
-      </table>
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <TableHeader />
+          <TableBody
+            data={sortedData}
+            onRowDeleteButtonClick={handleRowDeleteButtonClick}
+            onRowEditButtonClick={handleRowEditButtonClick}
+            onInfoButtonClick={handleInfoButtonClick}
+          />
+        </table>
+      </div>
     </Tile>
   );
 }
