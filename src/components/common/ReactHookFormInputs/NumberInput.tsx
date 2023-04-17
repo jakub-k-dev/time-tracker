@@ -5,7 +5,7 @@ import InputWrapper from "./InputWrapper";
 type Props<T extends FieldValues> = {
   label: string;
   register: UseFormRegister<T>;
-  placeholder: string;
+  placeholder?: string;
   inputId: Path<T>;
   errorMessage?: string;
 };
