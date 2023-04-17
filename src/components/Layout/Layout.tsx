@@ -9,10 +9,10 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="min-h-full">
+    <>
       <Navbar />
-      <div className="py-10 flex flex-col gap-8">{children}</div>
+      <div className="py-10 flex flex-col gap-8 flex-grow">{children}</div>
       <Footer />
-    </div>
+    </>
   );
 }
