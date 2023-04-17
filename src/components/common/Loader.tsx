@@ -3,7 +3,7 @@ export default function Loader() {
     <div role="status" className="h-full w-full text-center">
       <svg
         aria-hidden="true"
-        className="inline w-40 h-40 text-gray-200 animate-spin dark:text-gray-600 fill-primary-main"
+        className="inline w-40 h-40 text-gray-200 animate-spin dark:text-gray-600 fill-gray-100"
         viewBox="0 0 100 101"
         fill="none"
       >

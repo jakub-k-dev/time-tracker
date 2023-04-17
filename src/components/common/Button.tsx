@@ -2,9 +2,9 @@ type ButtonVariant = "primary" | "secondary";
 
 const mapVariantToStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary-main text-primary-text hover:bg-primary-alt border-secondary-main disabled:bg-primary-alt",
+    "text-white bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2        disabled:bg-indigo-400",
   secondary:
-    "bg-secondary-main text-secondary-text hover:bg-secondary-alt border-primary-main disabled:bg-secondary-alt",
+    "bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:bg-gray-200",
 };
 
 type Props = { variant?: ButtonVariant } & React.DetailedHTMLProps<
@@ -16,7 +16,7 @@ export default function Button({ variant = "primary", ...rest }: Props) {
   return (
     <button
       {...rest}
-      className={`py-3 px-4 rounded-md border-2 ${mapVariantToStyles[variant]}`}
+      className={`rounded px-2 py-1 sm:rounded-md sm:px-3.5 sm:py-2.5 text-sm font-semibold shadow-sm ${mapVariantToStyles[variant]}`}
     />
   );
 }
