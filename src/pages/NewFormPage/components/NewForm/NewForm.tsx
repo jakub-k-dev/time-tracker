@@ -1,6 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm, useFormState } from "react-hook-form";
-import { Button, NumberInput, TextAreaInput, TextInput } from "src/components";
+import {
+  Button,
+  DateAndTimeInput,
+  DateInput,
+  DateRangeInput,
+  NumberInput,
+  TextAreaInput,
+  TextInput,
+  TimeInput,
+} from "src/components";
+import { Optional } from "src/types";
 import { z, ZodTypeAny } from "zod";
 
 type Props = {};
@@ -16,6 +26,10 @@ export type FormValues = {
     name: string;
     number?: number;
   }[];
+  dateInput: Optional<Date>;
+  timeInput: Optional<Date>;
+  dateAndTimeInput: Optional<Date>;
+  dateRangeInput: [Optional<Date>, Optional<Date>];
 };
 
 const schema = z.object<{ [T in keyof FormValues]: ZodTypeAny }>({
@@ -33,12 +47,26 @@ const schema = z.object<{ [T in keyof FormValues]: ZodTypeAny }>({
       })
     )
     .nonempty(),
+  dateInput: z.date({ required_error: "Required" }),
+  timeInput: z.date({ required_error: "Required" }),
+  dateAndTimeInput: z.date({ required_error: "Required" }),
+  dateRangeInput: z.tuple(
+    [
+      z.date({ required_error: "Required" }),
+      z.date({ required_error: "Required" }),
+    ],
+    { required_error: "Required" }
+  ),
 });
 
 const defaultValues: FormValues = {
   name: "",
   description: "",
   array: [],
+  dateInput: null,
+  timeInput: null,
+  dateAndTimeInput: null,
+  dateRangeInput: [null, null],
 };
 
 export default function NewForm({}: Props) {
@@ -78,6 +106,18 @@ export default function NewForm({}: Props) {
           label="Number of attempts"
         />
         <NumberInput register={register} inputId="limit" label="Limit" />
+        <DateInput label="Date input" control={control} inputId="dateInput" />
+        <TimeInput label="Time input" control={control} inputId="timeInput" />
+        <DateRangeInput
+          label="Date range input"
+          control={control}
+          inputId="dateRangeInput"
+        />
+        <DateAndTimeInput
+          label="Date and time input"
+          control={control}
+          inputId="dateAndTimeInput"
+        />
         {fields.map((field, index) => (
           <li key={field.id} className="flex gap-4">
             <TextInput

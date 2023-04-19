@@ -12,15 +12,17 @@ export default function StatisticsTile() {
   return (
     <Tile title="Statistics">
       <table>
-        {tableValues.map((col) => (
-          <tr key={`row-${col[0]}`}>
-            {col.map((cell, i) => (
-              <td className="p-1" key={`row-${col[0]}-col-${i}`}>
-                {cell}
-              </td>
-            ))}
-          </tr>
-        ))}
+        <tbody>
+          {tableValues.map((col) => (
+            <tr key={`row-${col[0]}`}>
+              {col.map((cell, i) => (
+                <td className="p-1" key={`row-${col[0]}-col-${i}`}>
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
       </table>
     </Tile>
   );

@@ -6,3 +6,5 @@ export type TimeTableEntry = {
 };
 
 export type TimeTableEntryWithoutId = Omit<TimeTableEntry, "id">;
+
+export type Optional<T> = T | null;

@@ -1,9 +1,12 @@
 export { default as IconButton } from "./IconButton";
 export { default as Loader } from "./Loader";
-export { default as DateInput } from "./ReactHookFormInputs/DateInput";
+export { default as DateAndTimeInput } from "./ReactHookFormInputs/DateAndTimeInput";
 export { default as InputWrapper } from "./ReactHookFormInputs/InputWrapper";
 export { default as TextAreaInput } from "./ReactHookFormInputs/TextAreaInput";
 export { default as TextInput } from "./ReactHookFormInputs/TextInput";
 export { default as NumberInput } from "./ReactHookFormInputs/NumberInput";
 export { default as Button } from "./Button";
 export { default as Modal } from "./Modal";
+export { default as DateInput } from "./ReactHookFormInputs/DateInput";
+export { default as TimeInput } from "./ReactHookFormInputs/TimeInput";
+export { default as DateRangeInput } from "./ReactHookFormInputs/DateRangeInput";

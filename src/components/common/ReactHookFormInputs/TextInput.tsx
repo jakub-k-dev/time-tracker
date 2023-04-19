@@ -22,8 +22,8 @@ export default function TextInput<T extends FieldValues>({
       <input
         type="text"
         placeholder={placeholder}
-        className={`w-full rounded-md p-2 ${
-          errorMessage ? "border-red-600 border-2" : ""
+        className={`w-full rounded-md p-2 border-2 ${
+          errorMessage ? "border-red-600" : "border-gray-500"
         }`}
         {...register(inputId)}
       />

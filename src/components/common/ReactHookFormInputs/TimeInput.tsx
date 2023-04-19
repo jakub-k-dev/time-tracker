@@ -9,6 +9,6 @@ type Props<T extends FieldValues> = {
   errorMessage?: string;
 };
 
-export default function DateInput<T extends FieldValues>(props: Props<T>) {
-  return <DateAndTimeInput {...props} dateFormat="P" showTimeSelect={false} />;
+export default function TimeInput<T extends FieldValues>(props: Props<T>) {
+  return <DateAndTimeInput {...props} dateFormat="p" showDateSelect={false} />;
 }

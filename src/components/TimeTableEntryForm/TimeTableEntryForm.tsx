@@ -131,7 +131,11 @@ export default function TimeTableEntryForm({
         id={FORM_ID}
         className="flex flex-col gap-8"
       >
-        <TimeTableEntryFormFields register={register} errors={errors} />
+        <TimeTableEntryFormFields
+          register={register}
+          errors={errors}
+          control={control}
+        />
         <div className="self-end flex gap-4">
           {additionalFooterContent}
           <Button form={FORM_ID} disabled={isSubmitDisabled}>
