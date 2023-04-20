@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm, useFormState } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import {
   Button,
   DateAndTimeInput,
@@ -50,13 +50,20 @@ const schema = z.object<{ [T in keyof FormValues]: ZodTypeAny }>({
   dateInput: z.date({ required_error: "Required" }),
   timeInput: z.date({ required_error: "Required" }),
   dateAndTimeInput: z.date({ required_error: "Required" }),
-  dateRangeInput: z.tuple(
-    [
-      z.date({ required_error: "Required" }),
-      z.date({ required_error: "Required" }),
-    ],
-    { required_error: "Required" }
-  ),
+  dateRangeInput: z.array(z.date().nullable()).superRefine((val, ctx) => {
+    const result = z
+      .tuple([
+        z.date({ invalid_type_error: "Required" }),
+        z.date({ invalid_type_error: "Select second date" }),
+      ])
+      .safeParse(val);
+    if (!result.success) {
+      ctx.addIssue({
+        ...result.error.errors[0],
+        path: [],
+      });
+    }
+  }),
 });
 
 const defaultValues: FormValues = {
@@ -74,13 +81,12 @@ export default function NewForm({}: Props) {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues,
     mode: "all",
   });
-  const { isDirty } = useFormState({ control });
   const { fields, append, remove } = useFieldArray({ control, name: "array" });
 
   const hasErrors = Object.keys(errors).length !== 0;
