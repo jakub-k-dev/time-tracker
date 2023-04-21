@@ -17,9 +17,9 @@ export default function TimeTableEntryFormFields({
   return (
     <div className="flex flex-col gap-2">
       <NumberInput
-        label="Time (in hours)"
+        label="Time"
         inputId="time"
-        placeholder="Title"
+        placeholder="time in hours"
         register={register}
         errorMessage={timeError?.message}
       />
