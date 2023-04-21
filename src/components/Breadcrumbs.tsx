@@ -1,5 +1,5 @@
 import { HomeIcon } from "@heroicons/react/20/solid";
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 
 const breadcrumbNameMap: Record<string, ReactNode> = {
   "/": <HomeIcon className="h-5 w-5 flex-shrink-0" />,
@@ -22,24 +22,22 @@ export default function Breadcrumbs({ paths }: Props) {
           const isLast = index === paths.length - 1;
           if (index === 0) {
             return (
-              <div
+              <a
                 key="/"
+                href="/"
                 className="flex items-center text-gray-400 hover:text-gray-500 last:text-gray-700 last:hover:text-gray-900"
               >
-                <a href="/">
+                <span>
                   {breadcrumbNameMap["/"]}
                   <span className="sr-only">Home</span>
-                </a>
-              </div>
+                </span>
+              </a>
             );
           }
           const href = paths.slice(1, index + 1).join("");
 
           return (
-            <div
-              key={href}
-              className="flex items-center font-medium last:font-bold"
-            >
+            <Fragment key={href}>
               <svg
                 className="h-full w-6 flex-shrink-0 text-gray-200"
                 viewBox="0 0 24 44"
@@ -51,12 +49,12 @@ export default function Breadcrumbs({ paths }: Props) {
               </svg>
               <a
                 href={href}
-                className="ml-4 text-sm"
+                className="flex items-center font-medium last:font-bold ml-4 text-sm"
                 aria-current={isLast ? "page" : undefined}
               >
                 {breadcrumbNameMap[path] || path.substring(1)}
               </a>
-            </div>
+            </Fragment>
           );
         })}
       </p>

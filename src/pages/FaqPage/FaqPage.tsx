@@ -6,7 +6,7 @@ import FaqList from "./components/FaqList";
 export default function FaqPage() {
   return (
     <>
-      <PageTitle>Faq Page</PageTitle>;
+      <PageTitle>Faq Page</PageTitle>
       <PageContent>
         <FaqList />
       </PageContent>
