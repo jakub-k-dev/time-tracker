@@ -21,7 +21,7 @@ type Props = {
 export type FormValues = {
   time: string;
   info: string;
-  date: string;
+  date: Date | "";
 };
 
 const FORM_ID = "timeTableEntryForm";
@@ -35,7 +35,7 @@ const schema = z.object({
   info: z.string().min(1, {
     message: "Info is required",
   }),
-  date: z.coerce.date().or(z.string().max(0)),
+  date: z.date().or(z.string().max(0)),
 });
 
 const emptyFormValues: FormValues = {
@@ -49,7 +49,7 @@ const mapDefaultValuesToFormValues = ({
   info,
   time,
 }: TimeTableEntry): FormValues => ({
-  date,
+  date: new Date(date),
   time: time.toString(),
   info,
 });
@@ -59,7 +59,7 @@ const mapFormValuesToTimeTableEntry = ({
   info,
   time,
 }: FormValues): TimeTableEntryWithoutId => ({
-  date,
+  date: date.toString(),
   time: parseInt(time),
   info,
 });

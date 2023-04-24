@@ -26,6 +26,7 @@ export default function TimeTableEntryFormModal() {
     <Modal
       isOpen={isModalOpen}
       title={formMode && mapModeToModalTitle[formMode]}
+      onRequestClose={handleCloseModal}
     >
       <TimeTableEntryForm
         mode={formMode}
