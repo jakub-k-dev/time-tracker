@@ -23,7 +23,11 @@ export default function TimeTableEntryInfoModal() {
   const handleCloseModal = () => dispatch(timeTableInfoModalClose());
 
   return (
-    <Modal isOpen={isModalOpen} title={"Entry info"}>
+    <Modal
+      isOpen={isModalOpen}
+      title="Entry info"
+      onRequestClose={handleCloseModal}
+    >
       <div className="flex flex-col gap-4">
         {timeTableEntry && (
           <>
