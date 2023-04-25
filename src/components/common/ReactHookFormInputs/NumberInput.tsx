@@ -1,6 +1,6 @@
 import { Control, FieldValues, Path } from "react-hook-form";
 
-import FieldWrapper from "../FieldWrapper";
+import FieldWrapper from "./FieldWrapper";
 
 type Props<T extends FieldValues> = {
   label: string;
