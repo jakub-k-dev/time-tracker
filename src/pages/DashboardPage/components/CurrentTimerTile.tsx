@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, useForm, useFormState } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Button, Loader, TextInput, Tile } from "src/components";
+import { Button, Input, Loader, Tile } from "src/components";
 import { createTimeTableEntry } from "src/components/TimeTableEntryForm/api";
 import * as z from "zod";
 
@@ -127,7 +127,7 @@ export default function CurrentTimerTile() {
       ) : (
         <div className="flex justify-between items-center">
           <form onSubmit={handleSubmit(handleCheckInOrOut)} id={FORM_ID}>
-            <TextInput
+            <Input
               label="Info"
               name="info"
               placeholder="Info"

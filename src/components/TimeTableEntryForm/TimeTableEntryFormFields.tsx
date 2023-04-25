@@ -1,5 +1,5 @@
 import { Control } from "react-hook-form";
-import { DateInput, NumberInput, TextAreaInput } from "src/components";
+import { DateInput, Input, TextAreaInput } from "src/components";
 
 import { FormValues } from "./TimeTableEntryForm";
 
@@ -10,11 +10,12 @@ type Props = {
 export default function TimeTableEntryFormFields({ control }: Props) {
   return (
     <div className="flex flex-col gap-2">
-      <NumberInput
+      <Input
         label="Time"
         name="time"
         placeholder="time in hours"
         control={control}
+        type="number"
       />
       <DateInput label="Date" control={control} name="date" />
       <TextAreaInput

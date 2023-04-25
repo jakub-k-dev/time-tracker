@@ -11,9 +11,8 @@ import {
   DateAndTimeInput,
   DateInput,
   DateRangeInput,
-  NumberInput,
+  Input,
   TextAreaInput,
-  TextInput,
   TimeInput,
 } from "src/components";
 import { Optional } from "src/types";
@@ -97,18 +96,19 @@ export default function NewForm({}: Props) {
         id={FORM_ID}
         className="flex flex-col gap-8"
       >
-        <TextInput control={control} name="name" label="Name" />
+        <Input control={control} name="name" label="Name" />
         <TextAreaInput
           control={control}
           name="description"
           label="Description"
         />
-        <NumberInput
+        <Input
           control={control}
           name="numberOfAttempts"
           label="Number of attempts"
+          type="number"
         />
-        <NumberInput control={control} name="limit" label="Limit" />
+        <Input control={control} name="limit" label="Limit" type="number" />
         <DateInput label="Date input" control={control} name="dateInput" />
         <TimeInput label="Time input" control={control} name="timeInput" />
         <DateRangeInput
@@ -123,15 +123,16 @@ export default function NewForm({}: Props) {
         />
         {fields.map((field, index) => (
           <li key={field.id} className="flex gap-4">
-            <TextInput
+            <Input
               control={control}
               name={`array.${index}.name`}
               label="Name"
             />
-            <NumberInput
+            <Input
               control={control}
               name={`array.${index}.number`}
               label="Number"
+              type="number"
             />
             <Button onClick={() => remove(index)}>Remove</Button>
           </li>
