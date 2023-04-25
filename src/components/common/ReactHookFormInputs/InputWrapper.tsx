@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 type Props = {
   label: string;
-  inputId: string;
+  inputName?: string;
   children: ReactNode;
   errorMessage?: string;
 };
@@ -11,14 +11,14 @@ type Props = {
 export default function InputWrapper({
   children,
   label,
-  inputId,
+  inputName,
   errorMessage,
 }: Props) {
   return (
     <div className="flex flex-col grow">
       <label
         className="flex select-none items-center justify-between p-2"
-        htmlFor={inputId}
+        htmlFor={inputName}
       >
         <span>{label}</span>
         {errorMessage && (

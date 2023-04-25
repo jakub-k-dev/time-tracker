@@ -1,31 +1,23 @@
-import { FieldValues, Path, UseFormRegister } from "react-hook-form";
+import { Control, FieldValues, Path } from "react-hook-form";
 
-import InputWrapper from "./InputWrapper";
+import FieldWrapper from "../FieldWrapper";
 
 type Props<T extends FieldValues> = {
   label: string;
-  register: UseFormRegister<T>;
+  control: Control<T>;
   placeholder?: string;
-  inputId: Path<T>;
-  errorMessage?: string;
+  name: Path<T>;
 };
 
 export default function TextAreaInput<T extends FieldValues>({
   label,
-  register,
+  control,
   placeholder,
-  inputId,
-  errorMessage,
+  name,
 }: Props<T>) {
   return (
-    <InputWrapper label={label} inputId={inputId} errorMessage={errorMessage}>
-      <textarea
-        className={`w-full rounded-md p-2 border-2 ${
-          errorMessage ? "border-red-600" : "border-gray-500"
-        }`}
-        placeholder={placeholder}
-        {...register(inputId)}
-      />
-    </InputWrapper>
+    <FieldWrapper label={label} control={control} name={name}>
+      <textarea placeholder={placeholder} />
+    </FieldWrapper>
   );
 }

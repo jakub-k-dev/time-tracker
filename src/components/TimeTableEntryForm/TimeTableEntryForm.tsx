@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
-import { useForm, useFormState } from "react-hook-form";
+import { Control, FieldValues, useForm, useFormState } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { Button, Loader } from "src/components";
 import { TimeTableEntry, TimeTableEntryWithoutId } from "src/types";
@@ -86,20 +86,13 @@ export default function TimeTableEntryForm({
       onSuccess: handleFormSubmitSuccess,
     });
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FormValues>({
+  const { control, handleSubmit, reset } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues
       ? mapDefaultValuesToFormValues(defaultValues)
       : emptyFormValues,
     mode: "all",
   });
-  const { isDirty } = useFormState({ control });
 
   const handleFormSubmit = (data: FormValues) => {
     const parsedData = mapFormValuesToTimeTableEntry(data);
@@ -116,10 +109,6 @@ export default function TimeTableEntryForm({
     }
   };
 
-  const hasErrors = Object.keys(errors).length !== 0;
-
-  const isSubmitDisabled = !isDirty || hasErrors;
-
   if (isCreating || isEditing) {
     return <Loader />;
   }
@@ -131,18 +120,36 @@ export default function TimeTableEntryForm({
         id={FORM_ID}
         className="flex flex-col gap-8"
       >
-        <TimeTableEntryFormFields
-          register={register}
-          errors={errors}
+        <TimeTableEntryFormFields control={control} />
+        <FormFooter
           control={control}
+          additionalFooterContent={additionalFooterContent}
         />
-        <div className="self-end flex gap-4">
-          {additionalFooterContent}
-          <Button form={FORM_ID} disabled={isSubmitDisabled}>
-            Submit
-          </Button>
-        </div>
       </form>
     </>
+  );
+}
+
+type FormFooterProps<T extends FieldValues> = {
+  additionalFooterContent?: ReactNode;
+  control: Control<T>;
+};
+
+function FormFooter<T extends FieldValues>({
+  control,
+  additionalFooterContent,
+}: FormFooterProps<T>) {
+  const { errors, isDirty } = useFormState({ control });
+  const hasErrors = Object.keys(errors).length !== 0;
+
+  const isSubmitDisabled = !isDirty || hasErrors;
+
+  return (
+    <div className="self-end flex gap-4">
+      {additionalFooterContent}
+      <Button form={FORM_ID} disabled={isSubmitDisabled}>
+        Submit
+      </Button>
+    </div>
   );
 }

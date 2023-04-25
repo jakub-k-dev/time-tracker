@@ -92,7 +92,7 @@ export default function CurrentTimerTile() {
   }, [currentTimer]);
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
@@ -137,10 +137,9 @@ export default function CurrentTimerTile() {
           <form onSubmit={handleSubmit(handleCheckInOrOut)} id={FORM_ID}>
             <TextInput
               label="Info"
-              inputId="info"
+              name="info"
               placeholder="Info"
-              register={register}
-              errorMessage={errors.info?.message}
+              control={control}
             />
           </form>
           <Button form={FORM_ID} disabled={isSubmitDisabled}>

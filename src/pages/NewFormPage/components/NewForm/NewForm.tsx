@@ -79,7 +79,6 @@ const defaultValues: FormValues = {
 export default function NewForm({}: Props) {
   const {
     control,
-    register,
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<FormValues>({
@@ -100,40 +99,40 @@ export default function NewForm({}: Props) {
         id={FORM_ID}
         className="flex flex-col gap-8"
       >
-        <TextInput register={register} inputId="name" label="Name" />
+        <TextInput control={control} name="name" label="Name" />
         <TextAreaInput
-          register={register}
-          inputId="description"
+          control={control}
+          name="description"
           label="Description"
         />
         <NumberInput
-          register={register}
-          inputId="numberOfAttempts"
+          control={control}
+          name="numberOfAttempts"
           label="Number of attempts"
         />
-        <NumberInput register={register} inputId="limit" label="Limit" />
-        <DateInput label="Date input" control={control} inputId="dateInput" />
-        <TimeInput label="Time input" control={control} inputId="timeInput" />
+        <NumberInput control={control} name="limit" label="Limit" />
+        <DateInput label="Date input" control={control} name="dateInput" />
+        <TimeInput label="Time input" control={control} name="timeInput" />
         <DateRangeInput
           label="Date range input"
           control={control}
-          inputId="dateRangeInput"
+          name="dateRangeInput"
         />
         <DateAndTimeInput
           label="Date and time input"
           control={control}
-          inputId="dateAndTimeInput"
+          name="dateAndTimeInput"
         />
         {fields.map((field, index) => (
           <li key={field.id} className="flex gap-4">
             <TextInput
-              register={register}
-              inputId={`array.${index}.name`}
+              control={control}
+              name={`array.${index}.name`}
               label="Name"
             />
             <NumberInput
-              register={register}
-              inputId={`array.${index}.number`}
+              control={control}
+              name={`array.${index}.number`}
               label="Number"
             />
             <Button onClick={() => remove(index)}>Remove</Button>

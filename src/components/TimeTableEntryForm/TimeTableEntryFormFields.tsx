@@ -1,35 +1,27 @@
-import { Control, FieldErrorsImpl, UseFormRegister } from "react-hook-form";
+import { Control } from "react-hook-form";
 import { DateInput, NumberInput, TextAreaInput } from "src/components";
 
 import { FormValues } from "./TimeTableEntryForm";
 
 type Props = {
-  register: UseFormRegister<FormValues>;
   control: Control<FormValues>;
-  errors: Partial<FieldErrorsImpl<Record<keyof FormValues, string>>>;
 };
 
-export default function TimeTableEntryFormFields({
-  register,
-  control,
-  errors: { time: timeError, info: infoError },
-}: Props) {
+export default function TimeTableEntryFormFields({ control }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <NumberInput
         label="Time"
-        inputId="time"
+        name="time"
         placeholder="time in hours"
-        register={register}
-        errorMessage={timeError?.message}
+        control={control}
       />
-      <DateInput label="Date" control={control} inputId="date" />
+      <DateInput label="Date" control={control} name="date" />
       <TextAreaInput
         label="Info"
         placeholder="Time info"
-        register={register}
-        inputId="info"
-        errorMessage={infoError?.message}
+        control={control}
+        name="info"
       />
     </div>
   );

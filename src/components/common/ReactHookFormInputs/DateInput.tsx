@@ -5,7 +5,7 @@ import DateAndTimeInput from "./DateAndTimeInput";
 type Props<T extends FieldValues> = {
   label: string;
   control: Control<T>;
-  inputId: Path<T>;
+  name: Path<T>;
   errorMessage?: string;
 };
 
