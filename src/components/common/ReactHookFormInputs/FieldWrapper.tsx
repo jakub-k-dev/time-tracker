@@ -24,7 +24,10 @@ type RenderProps<T extends FieldValues> = Parameters<
 >[0];
 
 type FunctionChild<T extends FieldValues> = (
-  props: RenderProps<T>
+  props: RenderProps<T> & {
+    ref: (e: HTMLInputElement) => void;
+    className: string;
+  }
 ) => ReactNode;
 
 type Props<T extends FieldValues> = {
@@ -66,11 +69,11 @@ const RenderedWrapper = <T extends FieldValues>({
 
   useEffect(() => {
     if (error?.message) {
-      innerRef.current?.setCustomValidity(error.message);
+      innerRef.current?.setCustomValidity?.(error.message);
     } else {
-      innerRef.current?.setCustomValidity("");
+      innerRef.current?.setCustomValidity?.("");
     }
-    innerRef.current?.checkValidity();
+    innerRef.current?.checkValidity?.();
   }, [error?.message]);
 
   const refFunc = (e: HTMLInputElement) => {
@@ -93,6 +96,8 @@ const RenderedWrapper = <T extends FieldValues>({
             field,
             fieldState,
             formState,
+            ref: refFunc,
+            className,
           })}
     </InputWrapper>
   );
