@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Control, FieldValues, useForm, useFormState } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button, Loader, TextInput, Tile } from "src/components";
 import { createTimeTableEntry } from "src/components/TimeTableEntryForm/api";
@@ -91,12 +91,7 @@ export default function CurrentTimerTile() {
     return () => clearInterval(intervalId);
   }, [currentTimer]);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FormValues>({
+  const { control, handleSubmit, reset } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: emptyFormValues,
     mode: "all",
@@ -121,9 +116,6 @@ export default function CurrentTimerTile() {
     handleCheckIn({ info, startDate: new Date().toISOString() });
   };
 
-  const hasErrors = Object.keys(errors).length !== 0;
-  const isSubmitDisabled = hasErrors;
-
   const parsedTime =
     currentCheckInTime &&
     `${currentCheckInTime.getUTCHours()}:${currentCheckInTime.getUTCMinutes()}:${currentCheckInTime.getUTCSeconds()}`;
@@ -142,11 +134,30 @@ export default function CurrentTimerTile() {
               control={control}
             />
           </form>
-          <Button form={FORM_ID} disabled={isSubmitDisabled}>
-            {isCheckedIn ? "Check out" : "Check in"}
-          </Button>
+          <FormFooter control={control} isCheckedIn />
         </div>
       )}
     </Tile>
+  );
+}
+
+type FormFooterProps<T extends FieldValues> = {
+  control: Control<T>;
+  isCheckedIn: boolean;
+};
+
+function FormFooter<T extends FieldValues>({
+  control,
+  isCheckedIn,
+}: FormFooterProps<T>) {
+  const { errors } = useFormState({ control });
+
+  const hasErrors = Object.keys(errors).length !== 0;
+  const isSubmitDisabled = hasErrors;
+
+  return (
+    <Button form={FORM_ID} disabled={isSubmitDisabled}>
+      {isCheckedIn ? "Check out" : "Check in"}
+    </Button>
   );
 }

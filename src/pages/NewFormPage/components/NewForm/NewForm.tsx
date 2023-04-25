@@ -1,5 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import {
+  Control,
+  FieldValues,
+  useFieldArray,
+  useForm,
+  useFormState,
+} from "react-hook-form";
 import {
   Button,
   DateAndTimeInput,
@@ -77,20 +83,12 @@ const defaultValues: FormValues = {
 };
 
 export default function NewForm({}: Props) {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isDirty },
-  } = useForm<FormValues>({
+  const { control, handleSubmit } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues,
     mode: "all",
   });
   const { fields, append, remove } = useFieldArray({ control, name: "array" });
-
-  const hasErrors = Object.keys(errors).length !== 0;
-
-  const isSubmitDisabled = !isDirty || hasErrors;
 
   return (
     <>
@@ -139,12 +137,27 @@ export default function NewForm({}: Props) {
           </li>
         ))}
         <Button onClick={() => append({ name: "" })}>Add new</Button>
-        <div className="self-end flex gap-4">
-          <Button form={FORM_ID} disabled={isSubmitDisabled}>
-            Submit
-          </Button>
-        </div>
+        <FormFooter control={control} />
       </form>
     </>
+  );
+}
+
+type FormFooterProps<T extends FieldValues> = {
+  control: Control<T>;
+};
+
+function FormFooter<T extends FieldValues>({ control }: FormFooterProps<T>) {
+  const { errors } = useFormState({ control });
+
+  const hasErrors = Object.keys(errors).length !== 0;
+  const isSubmitDisabled = hasErrors;
+
+  return (
+    <div className="self-end flex gap-4">
+      <Button form={FORM_ID} disabled={isSubmitDisabled}>
+        Submit
+      </Button>
+    </div>
   );
 }
