@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { differenceInMilliseconds } from "date-fns";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, useForm, useFormState } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button, Input, Loader, Tile } from "src/components";
 import { createTimeTableEntry } from "src/components/TimeTableEntryForm/api";
+import { displayTimeFromMilliseconds } from "src/utils/dateUtils";
 import * as z from "zod";
 
 import {
@@ -35,11 +37,11 @@ const emptyFormValues: FormValues = {
 };
 
 export default function CurrentTimerTile() {
-  const [currentCheckInTime, setCurrentCheckInTime] = useState<Date>();
+  const [currentCheckInTime, setCurrentCheckInTime] = useState<number>(0);
 
   const queryClient = useQueryClient();
   const handleCheckInOrOutSuccess = () => {
-    setCurrentCheckInTime(undefined);
+    setCurrentCheckInTime(0);
     queryClient.invalidateQueries({ queryKey: "getCurrentEntry" });
   };
 
@@ -82,8 +84,9 @@ export default function CurrentTimerTile() {
     if (!currentTimer) return;
 
     const intervalId = setInterval(() => {
-      const subtractedTime = new Date(
-        new Date().getTime() - new Date(currentTimer.startDate).getTime()
+      const subtractedTime = differenceInMilliseconds(
+        new Date(),
+        new Date(currentTimer.startDate)
       );
       setCurrentCheckInTime(subtractedTime);
     }, 1000);
@@ -104,11 +107,7 @@ export default function CurrentTimerTile() {
   const handleCheckInOrOut = ({ info }: FormValues) => {
     if (isCheckedIn) {
       const time =
-        (currentCheckInTime &&
-          parseFloat(
-            (currentCheckInTime.getTime() / 1000 / 60 / 60).toFixed(2)
-          )) ||
-        0.01;
+        parseFloat((currentCheckInTime / 1000 / 60 / 60).toFixed(2)) || 0.01;
       handleCheckOut(currentTimer?.id);
       handleAddEntryToTimeTable({ info, time, date: currentTimer.startDate });
       return;
@@ -116,9 +115,7 @@ export default function CurrentTimerTile() {
     handleCheckIn({ info, startDate: new Date().toISOString() });
   };
 
-  const parsedTime =
-    currentCheckInTime &&
-    `${currentCheckInTime.getUTCHours()}:${currentCheckInTime.getUTCMinutes()}:${currentCheckInTime.getUTCSeconds()}`;
+  const parsedTime = displayTimeFromMilliseconds(currentCheckInTime);
 
   return (
     <Tile title="Automatic entry" header={parsedTime || "00:00:00"}>
@@ -134,7 +131,7 @@ export default function CurrentTimerTile() {
               control={control}
             />
           </form>
-          <FormFooter control={control} isCheckedIn />
+          <FormFooter control={control} isCheckedIn={isCheckedIn} />
         </div>
       )}
     </Tile>

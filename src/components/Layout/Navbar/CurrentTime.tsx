@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
 export default function CurrentTime() {
@@ -8,5 +9,5 @@ export default function CurrentTime() {
     return () => clearInterval(intervalId);
   }, []);
 
-  return <div>{currentTime.toLocaleTimeString()}</div>;
+  return <div>{format(currentTime, "pp")}</div>;
 }

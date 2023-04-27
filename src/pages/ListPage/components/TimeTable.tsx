@@ -1,4 +1,5 @@
 import { ClockIcon } from "@heroicons/react/24/solid";
+import { format, isValid } from "date-fns";
 import { useMutation, useQuery } from "react-query";
 import { useDispatch } from "react-redux";
 import { IconButton, Loader, Tile } from "src/components";
@@ -13,7 +14,7 @@ type TableRowData = {
   id: string;
   time: string;
   info: string;
-  date: string;
+  date: Date;
 };
 
 const mapResponseDataToTableData = (
@@ -23,7 +24,7 @@ const mapResponseDataToTableData = (
     id,
     time: `${time}h`,
     info,
-    date,
+    date: new Date(date),
   }));
 
 const TableHeader = () => (
@@ -54,19 +55,17 @@ const TableBody = ({
     {data.map(({ id, info, time, date }) => (
       <tr key={`row-${id}`} className="border-t-2 border-t-black">
         <td className="p-2">
-          <div className="flex gap-2 items-center">
-            <div className="h-10 w-10 p-1 bg-gray-200 rounded-md shadow border-t-4 border-t-red-600 font-bold text-center">
-              {new Date(date).getDate()}.
+          {isValid(date) && (
+            <div className="flex gap-2 items-center">
+              <div className="h-10 w-10 p-1 bg-gray-200 rounded-md shadow border-t-4 border-t-red-600 font-bold text-center">
+                {format(date, "d")}.
+              </div>
+              <div>
+                <p className="text-sm font-semibold">{format(date, "EEEE")}</p>
+                <p className="text-xs">{format(date, "P")}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-semibold">
-                {new Date(date).toLocaleDateString(undefined, {
-                  weekday: "long",
-                })}
-              </p>
-              <p className="text-xs">{new Date(date).toLocaleDateString()}</p>
-            </div>
-          </div>
+          )}
         </td>
         <td className="p-2 text-center">
           <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-0.5 text-sm font-medium w-20 justify-between">
@@ -168,7 +167,7 @@ export default function TimeTable() {
 
   const parsedData = mapResponseDataToTableData(timeTableResponse);
   const sortedData = parsedData.sort(({ date: date1 }, { date: date2 }) =>
-    new Date(date1) > new Date(date2) ? 1 : -1
+    date1 > date2 ? 1 : -1
   );
 
   return (

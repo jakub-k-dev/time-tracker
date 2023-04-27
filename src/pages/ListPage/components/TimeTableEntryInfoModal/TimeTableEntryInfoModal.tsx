@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal } from "src/components";
 
@@ -34,7 +35,7 @@ export default function TimeTableEntryInfoModal() {
             {timeTableEntry.date && (
               <FieldDetail
                 title="Date"
-                detail={new Date(timeTableEntry.date).toLocaleDateString()}
+                detail={format(new Date(timeTableEntry.date), "P")}
               />
             )}
             <FieldDetail title="Time" detail={`${timeTableEntry.time} hours`} />
