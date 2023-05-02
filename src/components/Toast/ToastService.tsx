@@ -6,8 +6,12 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Fragment, ReactNode, useLayoutEffect, useRef, useState } from "react";
+import { useToastDrag } from "src/components/Toast/useToastDrag";
 
-import ToastServiceProvider, { useToastService } from "./context";
+import ToastServiceProvider, {
+  useToastService,
+  useToastServiceDispatch,
+} from "./context";
 import { Toast, ToastVariant } from "./types";
 
 type VariantProps = {
@@ -34,30 +38,64 @@ const variants: Record<ToastVariant, VariantProps> = {
   },
 };
 
-type ToastProps = { toast: Toast };
+type ToastProps = { toast: Toast; removeToast: () => void };
 
 function ToastItem({
   toast: { content, title, variant, isBeeingRemoved },
+  removeToast,
 }: ToastProps) {
+  const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>();
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleMouseUpAfterDrag = (endDeltaX: number) => {
+    if (Math.abs(endDeltaX) > width) {
+      removeToast();
+    }
+  };
+
+  const { ref: dragRef, deltaX } = useToastDrag({
+    onMouseUp: handleMouseUpAfterDrag,
+  });
 
   useLayoutEffect(() => {
-    ref.current && setHeight(ref.current.getBoundingClientRect().height);
+    if (ref.current) {
+      setHeight(ref.current.getBoundingClientRect().height);
+      setWidth(ref.current.getBoundingClientRect().width);
+    }
   }, []);
+
+  const normalStyles = {
+    height: `${height}px`,
+    transform: `translateX(${deltaX}px) scale(1)`,
+    opacity: 1 - Math.abs(deltaX / 2) / width,
+    transitionDuration: "200ms",
+    transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+  };
+
+  const removingStyles = {
+    height: "0px",
+    transform: `translateX(${deltaX}px) scale(0)`,
+    opacity: 0,
+    transitionDuration: "1000ms",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+  };
 
   return (
     <Transition
       show={!isBeeingRemoved}
       as={Fragment}
       leave="ease-in-out duration-1000"
-      leaveFrom="opacity-100 scale-100 text-base"
-      leaveTo="opacity-0 scale-0 text-0"
+      leaveFrom="text-base"
+      leaveTo="text-0"
     >
       <div
-        ref={ref}
-        style={{ height: isBeeingRemoved ? "0px" : `${height}px` }}
-        className="transition-all ease-in-out duration-1000 w-64 bg-white rounded-md drop-shadow-2xl flex items-center gap-2 pointer-events-auto"
+        ref={(e) => {
+          ref.current = e;
+          dragRef.current = e;
+        }}
+        style={isBeeingRemoved ? removingStyles : normalStyles}
+        className="transition-all w-full sm:w-64 bg-white rounded-md drop-shadow-2xl flex items-center gap-2 pointer-events-auto"
       >
         <div
           className={`w-4 rounded-l-md drop-shadow-m self-stretch ${variants[variant].color}`}
@@ -73,11 +111,16 @@ function ToastItem({
 }
 
 function Toasts() {
+  const { removeToastAction } = useToastServiceDispatch();
   const toasts = useToastService();
   return (
-    <div className="absolute bg-transparent top-0 right-0 p-8 flex flex-col gap-4 pointer-events-none">
+    <div className="absolute bg-transparent p-8 flex flex-col max-sm:flex-col-reverse gap-4 pointer-events-none max-sm:bottom-0 max-sm:inset-x-0 sm:top-0 sm:right-0">
       {toasts.map((toast) => (
-        <ToastItem toast={toast} key={toast.id} />
+        <ToastItem
+          toast={toast}
+          key={toast.id}
+          removeToast={() => removeToastAction(toast.id)}
+        />
       ))}
     </div>
   );

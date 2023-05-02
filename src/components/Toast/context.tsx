@@ -13,7 +13,14 @@ type ToastWithoutId = Omit<Toast, "id">;
 
 const ToastServiceContext = createContext<Toast[]>([]);
 
-const ToastServiceDispatchContext = createContext<any>(null!);
+type AddNewToastAction = (toast: ToastWithoutId, timeout?: number) => void;
+type RemoveToastAction = (id: string) => void;
+type DispatchActions = {
+  addNewToastAction: AddNewToastAction;
+  removeToastAction: RemoveToastAction;
+};
+
+const ToastServiceDispatchContext = createContext<DispatchActions>(null!);
 
 type Props = { children: ReactNode };
 
