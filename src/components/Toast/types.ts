@@ -7,4 +7,5 @@ export type Toast = {
   title: string;
   content: string | ReactNode;
   variant: ToastVariant;
+  isBeeingRemoved?: boolean;
 };

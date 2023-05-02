@@ -1,11 +1,11 @@
 import {
   createContext,
-  Dispatch,
   ReactNode,
+  useCallback,
   useContext,
-  useId,
   useReducer,
 } from "react";
+import { useIntId } from "src/hooks/useIntId";
 
 import { Toast } from "./types";
 
@@ -13,18 +13,49 @@ type ToastWithoutId = Omit<Toast, "id">;
 
 const ToastServiceContext = createContext<Toast[]>([]);
 
-const ToastServiceDispatchContext = createContext<
-  Dispatch<ToastServiceActions>
->(null!);
+const ToastServiceDispatchContext = createContext<any>(null!);
 
 type Props = { children: ReactNode };
 
 export default function ToastServiceProvider({ children }: Props) {
   const [toasts, dispatch] = useReducer(toastServiceReducer, []);
+  const getNewId = useIntId();
+
+  const addNewToastAction = useCallback(
+    (toast: ToastWithoutId, timeout: number = 10000) => {
+      const id = `toast-${getNewId()}`;
+      dispatch({
+        type: "ADD",
+        payload: { toast: { id, ...toast } },
+      });
+
+      if (timeout !== 0) {
+        setTimeout(() => {
+          removeToastAction(id);
+        }, timeout);
+      }
+    },
+    []
+  );
+
+  const removeToastAction = useCallback((id: string) => {
+    dispatch({
+      type: "REMOVE",
+      payload: { id },
+    });
+    setTimeout(() => {
+      dispatch({
+        type: "FORCE_REMOVE",
+        payload: { id },
+      });
+    }, 1000);
+  }, []);
 
   return (
     <ToastServiceContext.Provider value={toasts}>
-      <ToastServiceDispatchContext.Provider value={dispatch}>
+      <ToastServiceDispatchContext.Provider
+        value={{ addNewToastAction, removeToastAction }}
+      >
         {children}
       </ToastServiceDispatchContext.Provider>
     </ToastServiceContext.Provider>
@@ -41,21 +72,21 @@ export function useToastServiceDispatch() {
 
 type ToastServiceAddToastAction = {
   type: "ADD";
-  payload: { toast: ToastWithoutId };
-};
-type ToastServiceEditToastAction = {
-  type: "EDIT";
-  payload: { id: string; toast: Toast };
+  payload: { toast: Toast };
 };
 type ToastServiceRemoveToastAction = {
   type: "REMOVE";
   payload: { id: string };
 };
+type ToastServiceForceRemoveToastAction = {
+  type: "FORCE_REMOVE";
+  payload: { id: string };
+};
 
 type ToastServiceActions =
   | ToastServiceAddToastAction
-  | ToastServiceEditToastAction
-  | ToastServiceRemoveToastAction;
+  | ToastServiceRemoveToastAction
+  | ToastServiceForceRemoveToastAction;
 
 function toastServiceReducer(
   toasts: Toast[],
@@ -63,25 +94,26 @@ function toastServiceReducer(
 ): Toast[] {
   switch (action.type) {
     case "ADD": {
-      const id = useId();
       return [
         ...toasts,
         {
           ...action.payload.toast,
-          id,
         },
       ];
     }
-    case "EDIT": {
-      return toasts.map((t) => {
-        if (t.id === action.payload.toast.id) {
-          return action.payload.toast;
+    case "REMOVE": {
+      return toasts.map((toast) => {
+        if (toast.id === action.payload.id) {
+          return { ...toast, isBeeingRemoved: true };
         }
-        return t;
+        return toast;
       });
     }
-    case "REMOVE": {
+    case "FORCE_REMOVE": {
       return toasts.filter((toast) => toast.id !== action.payload.id);
+    }
+    default: {
+      return toasts;
     }
   }
 }
