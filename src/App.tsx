@@ -16,15 +16,15 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <ToastServiceWithProvider>
         <BrowserRouter>
-          <Layout>
-            <Routes>
+          <Routes>
+            <Route path="" element={<Layout />}>
               <Route path="/" element={<DashboardPage />} />
               <Route path="/list" element={<ListPage />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/newForm" element={<NewFormnPage />} />
               <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Layout>
+            </Route>
+          </Routes>
         </BrowserRouter>
       </ToastServiceWithProvider>
     </QueryClientProvider>
