@@ -1,4 +1,5 @@
 import { JSXElementConstructor, SVGProps } from "react";
+import { Link } from "react-router-dom";
 
 type FooterNavigation = {
   name: string;
@@ -76,15 +77,15 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-12 flex flex-col md:flex-row md:items-center md:justify-between lg:px-8 gap-8 ">
         <div className="flex justify-center space-x-6 md:order-2">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
+              to={item.href}
               className="text-gray-400 hover:text-gray-500"
               target="_blank"
             >
               <span className="sr-only">{item.name}</span>
               <item.icon className="h-6 w-6" aria-hidden="true" />
-            </a>
+            </Link>
           ))}
         </div>
         <div className="md:order-1">
