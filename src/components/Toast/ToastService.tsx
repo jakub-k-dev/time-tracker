@@ -68,7 +68,7 @@ function ToastItem({
   const normalStyles = {
     height: `${height}px`,
     transform: `translateX(${deltaX}px) scale(1)`,
-    opacity: 1 - Math.abs(deltaX / 2) / width,
+    opacity: 1 - Math.abs(deltaX / 2) / (width || 1),
     transitionDuration: "200ms",
     transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
   };
@@ -95,7 +95,7 @@ function ToastItem({
           dragRef.current = e;
         }}
         style={isBeeingRemoved ? removingStyles : normalStyles}
-        className="transition-all w-full sm:w-64 bg-white rounded-md drop-shadow-2xl flex items-center gap-2 pointer-events-auto"
+        className="select-none transition-all w-full sm:w-64 bg-white rounded-md drop-shadow-2xl flex items-center gap-2 pointer-events-auto"
       >
         <div
           className={`w-4 rounded-l-md drop-shadow-m self-stretch ${variants[variant].color}`}
