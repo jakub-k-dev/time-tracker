@@ -2,8 +2,11 @@ import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
 
-const menuItems = [
+type MenuItem = { name: string; href: string };
+
+const menuItems: MenuItem[] = [
   { name: "New Form", href: "/new-form" },
+  { name: "Testing", href: "/testing" },
   { name: "Not found page", href: "/i-found-it" },
 ];
 

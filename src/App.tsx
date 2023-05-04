@@ -4,6 +4,7 @@ import { DashboardPage, FaqPage, ListPage, NotFoundPage } from "src/pages";
 
 import ToastServiceWithProvider from "./components/Toast/ToastService";
 import NewFormnPage from "./pages/NewFormPage/NewFormPage";
+import TestingPage from "./pages/TestingPage/TestingPage";
 import { Layout } from "./components";
 import fontAwesomeConfig from "./FontAwesomeConfig";
 
@@ -22,6 +23,7 @@ export default function App() {
               <Route path="/list" element={<ListPage />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/new-form" element={<NewFormnPage />} />
+              <Route path="/testing" element={<TestingPage />} />
               <Route path="/not-found" element={<NotFoundPage />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Route>

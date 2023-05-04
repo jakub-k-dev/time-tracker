@@ -8,10 +8,7 @@ import {
 import { Fragment, ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { useToastDrag } from "src/components/Toast/useToastDrag";
 
-import ToastServiceProvider, {
-  useToastService,
-  useToastServiceDispatch,
-} from "./context";
+import ToastServiceProvider, { useToast, useToastService } from "./context";
 import { Toast, ToastVariant } from "./types";
 
 type VariantProps = {
@@ -71,6 +68,7 @@ function ToastItem({
     opacity: 1 - Math.abs(deltaX / 2) / (width || 1),
     transitionDuration: "200ms",
     transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+    marginBottom: "0rem",
   };
 
   const removingStyles = {
@@ -79,6 +77,7 @@ function ToastItem({
     opacity: 0,
     transitionDuration: "1000ms",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    marginBottom: "-1rem",
   };
 
   return (
@@ -111,8 +110,8 @@ function ToastItem({
 }
 
 function Toasts() {
-  const { removeToastAction } = useToastServiceDispatch();
-  const toasts = useToastService();
+  const { removeToastAction } = useToastService();
+  const toasts = useToast();
   return (
     <div className="absolute bg-transparent p-8 flex flex-col max-sm:flex-col-reverse gap-4 pointer-events-none max-sm:bottom-0 max-sm:inset-x-0 sm:top-0 sm:right-0">
       {toasts.map((toast) => (

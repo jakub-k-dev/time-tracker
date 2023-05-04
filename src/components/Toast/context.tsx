@@ -11,16 +11,16 @@ import { Toast } from "./types";
 
 type ToastWithoutId = Omit<Toast, "id">;
 
-const ToastServiceContext = createContext<Toast[]>([]);
+const ToastContext = createContext<Toast[]>([]);
 
 type AddNewToastAction = (toast: ToastWithoutId, timeout?: number) => void;
 type RemoveToastAction = (id: string) => void;
-type DispatchActions = {
+type ServiceActions = {
   addNewToastAction: AddNewToastAction;
   removeToastAction: RemoveToastAction;
 };
 
-const ToastServiceDispatchContext = createContext<DispatchActions>(null!);
+const ToastServiceContext = createContext<ServiceActions>(null!);
 
 type Props = { children: ReactNode };
 
@@ -59,22 +59,22 @@ export default function ToastServiceProvider({ children }: Props) {
   }, []);
 
   return (
-    <ToastServiceContext.Provider value={toasts}>
-      <ToastServiceDispatchContext.Provider
+    <ToastContext.Provider value={toasts}>
+      <ToastServiceContext.Provider
         value={{ addNewToastAction, removeToastAction }}
       >
         {children}
-      </ToastServiceDispatchContext.Provider>
-    </ToastServiceContext.Provider>
+      </ToastServiceContext.Provider>
+    </ToastContext.Provider>
   );
+}
+
+export function useToast() {
+  return useContext(ToastContext);
 }
 
 export function useToastService() {
   return useContext(ToastServiceContext);
-}
-
-export function useToastServiceDispatch() {
-  return useContext(ToastServiceDispatchContext);
 }
 
 type ToastServiceAddToastAction = {
