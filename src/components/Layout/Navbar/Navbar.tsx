@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import CurrentTime from "./CurrentTime";
+import Menu from "./Menu";
 
 const navigation = [
   { name: "Dashboard", href: "/" },
@@ -47,10 +48,11 @@ export default function Navbar() {
             </Link>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
           <div className="text-sm font-semibold leading-6 text-gray-900">
             <CurrentTime />
           </div>
+          <Menu />
         </div>
       </nav>
       <Dialog
@@ -90,6 +92,9 @@ export default function Navbar() {
               </div>
               <div className="py-6">
                 <CurrentTime />
+              </div>
+              <div className="py-6">
+                <Menu />
               </div>
             </div>
           </div>
