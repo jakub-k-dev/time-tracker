@@ -74,7 +74,7 @@ function ToastItem({
   const removingStyles = {
     height: "0px",
     transform: `translateX(${deltaX}px) scale(0)`,
-    opacity: 0,
+    opacity: 0.01,
     transitionDuration: "1000ms",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     marginBottom: "-1rem",
