@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { PageTitle } from "src/components";
 import PageContent from "src/components/Layout/PageContent";
 
@@ -6,9 +7,11 @@ import NewEntryTile from "./components/NewEntryTile";
 import StatisticsTile from "./components/StatisticsTile";
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
+
   return (
     <>
-      <PageTitle>Dashboard</PageTitle>
+      <PageTitle>{t("dashboardPage.title")}</PageTitle>
 
       <PageContent>
         <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
