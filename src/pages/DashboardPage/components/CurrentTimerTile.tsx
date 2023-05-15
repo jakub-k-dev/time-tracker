@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { differenceInMilliseconds } from "date-fns";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, useForm, useFormState } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button, Input, Loader, Tile } from "src/components";
 import { createTimeTableEntry } from "src/components/TimeTableEntryForm/api";
@@ -37,6 +38,7 @@ const emptyFormValues: FormValues = {
 };
 
 export default function CurrentTimerTile() {
+  const { t } = useTranslation();
   const [currentCheckInTime, setCurrentCheckInTime] = useState<number>(0);
 
   const queryClient = useQueryClient();
@@ -118,7 +120,7 @@ export default function CurrentTimerTile() {
   const parsedTime = displayTimeFromMilliseconds(currentCheckInTime);
 
   return (
-    <Tile title="Automatic entry" header={parsedTime || "00:00:00"}>
+    <Tile title={t("automaticEntry.title")} header={parsedTime || "00:00:00"}>
       {isLoading || isCheckingIn || isCheckingOut ? (
         <Loader />
       ) : (

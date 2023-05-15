@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Tile } from "src/components";
 
 const tableValues = [
@@ -9,8 +10,9 @@ const tableValues = [
 ];
 
 export default function StatisticsTile() {
+  const { t } = useTranslation();
   return (
-    <Tile title="Statistics">
+    <Tile title={t("statistics.title")}>
       <table>
         <tbody>
           {tableValues.map((col) => (
